@@ -86,4 +86,24 @@ function M.is_scratch(path)
   return file_dir == dir
 end
 
+-- Delete a scratch file. Refuses (error, level 0 -- no file:line noise) if `path`
+-- is not inside the scratch dir. Also wipes any loaded buffer for that path so a
+-- stale buffer can't resurrect the file on save. Returns true on success, or
+-- false, err on an OS-level delete failure.
+function M.delete(path)
+  if not M.is_scratch(path) then
+    error("scratch.storage: refusing to delete '" .. tostring(path) .. "': not inside the scratch dir", 0)
+  end
+
+  local bufnr = vim.fn.bufnr(path)
+  if bufnr ~= -1 then
+    vim.api.nvim_buf_delete(bufnr, { force = true })
+  end
+
+  if vim.fn.delete(path) ~= 0 then
+    return false, "scratch.storage: failed to delete '" .. path .. "'"
+  end
+  return true
+end
+
 return M

@@ -69,7 +69,9 @@ require("scratch").setup({
 ## Commands
 
 - **`:Scratch [filetype]`** — Create a new scratch file. If no filetype is given, opens a picker to choose one
-- **`:Scratches`** — Browse and open existing scratch files
+- **`:Scratches`** — Browse existing scratch files: open one, or delete one (always asks for confirmation first)
+  - With snacks.nvim: press `<C-x>` on the highlighted file to delete it; the picker stays open and refreshes
+  - Fallback (`vim.ui.select`): after picking a file, choose "Open" or "Delete"
 - **`:ScratchRun`** — Run the current scratch file (only works on files inside the scratch directory)
 
 ## Keymaps
@@ -102,7 +104,7 @@ Or leave `default_keymaps = false` and map the commands yourself for full contro
 - **Auto-increment naming** — Files are named `scratch_N.ext` where N is globally auto-incremented across all filetypes. The next index is computed by scanning the directory for the highest existing N
 - **Terminal execution** — Scripts run in a reused terminal split at the bottom of the window. The terminal persists across multiple runs, making it easy to see output history
 - **Scratch-only execution** — `:ScratchRun` only works on files inside the scratch directory; running it on other files will show an error
-- **No in-plugin deletion** — The directory simply grows; manage files manually if needed
+- **Delete from the browser** — `:Scratches` supports deleting a scratch (confirmed first), otherwise the directory just grows; no rename support
 
 ## Running tests
 
